@@ -66,8 +66,6 @@ BEGIN
 	PRINT '+Creating [System.DirectoryServices.AccountManagement] Assembly'
     CREATE ASSEMBLY [System.DirectoryServices.AccountManagement]
     AUTHORIZATION [dbo]
-    --FROM 'C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.DirectoryServices.dll'
-	--FROM 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.DirectoryServices.dll'
 	FROM 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.DirectoryServices.AccountManagement.dll'
     WITH PERMISSION_SET = UNSAFE
 END
