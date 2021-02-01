@@ -8,8 +8,8 @@
     <ProjectGuid>{4906F5E5-DC58-4856-9227-970C9D596C68}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PPSQLCLRUnsafe</RootNamespace>
-    <AssemblyName>PPSQLCLRUnsafe</AssemblyName>
+    <RootNamespace>PPSqlClrUnsafe</RootNamespace>
+    <AssemblyName>PP.SqlClr.Unsafe</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,23 +35,34 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PP.SqlClr.Unsafe.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryDataExporter\BinaryDataExporter.cs" />
     <Compile Include="Ranking\Ranking.cs" />
     <Compile Include="RunningTotal\RunningTotal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunningTotal\RunningTotalQueue.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BinaryDataExporter\PP.SqlClr.Unsafe.BinaryDataExporter.sql" />
+    <Content Include="PP.SqlClr.Unsafe.master.sql" />
     <Content Include="PP.SqlClr.Unsafe.sql" />
     <Content Include="Ranking\Ranking.sql" />
     <Content Include="RunningTotal\RunningTotals.sql" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="PP.SqlClr.Unsafe.snk" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetPath)" "C:\SQLCLR\" /Y /R /I</PostBuildEvent>
