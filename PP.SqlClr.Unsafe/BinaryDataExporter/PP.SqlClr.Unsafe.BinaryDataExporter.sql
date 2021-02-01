@@ -14,9 +14,9 @@ END
 PRINT '+Creating [ClrUnsafe].[usp_ExportProjectClr]'
 GO
 /* ==========================================================================
-   [ClrUnsafe].[usp_ExportBinaryData]
-
-   Exports Binary data specified by the source query
+   Author:		Pavel Pawlowski
+   Create date: 2020/02/01
+   Description:	Exports Binary data specified by the source query
 
    Parameters:
      @sourceQuery			nvarchar(max)		-- Source query providing binary data and corresponding files for data export
@@ -49,14 +49,14 @@ GO
    Description:	Exports Binary data to file
 
    Parameters:
-	@binaryData varbinary(max)		--Initial rank value
-	,@targetFile nvarchar(1024)		--value of the field for ranking
-	,@createPath bit			= 1	--value on which occurence a rank should increase
+	@binaryData varbinary(max)		--Binary data to be exported
+	,@targetFile nvarchar(1024)		--Full Path to target file
+	,@createPath bit			= 1	--Specifies whether directories in path of target filename should be automatically created if not exists
    ============================================= */
 CREATE FUNCTION [ClrUnsafe].[fn_ExportBinaryColumn](
-	@binaryData varbinary(max)		--Initial rank value
-	,@targetFile nvarchar(1024)		--value of the field for ranking
-	,@createPath bit			= 1	--value on which occurence a rank should increase
+	@binaryData varbinary(max)		--Binary data to be exported
+	,@targetFile nvarchar(1024)		--Full Path to target file
+	,@createPath bit			= 1	--Specifies whether directories in path of target filename should be automatically created if not exists
 )
 RETURNS [int]
 WITH EXECUTE AS CALLER
