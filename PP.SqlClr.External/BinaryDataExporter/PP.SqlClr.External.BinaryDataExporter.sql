@@ -1,17 +1,17 @@
-﻿IF (NOT EXISTS(SELECT 1 from sys.schemas WHERE name = 'ClrUnsafe'))
+﻿IF (NOT EXISTS(SELECT 1 from sys.schemas WHERE name = 'ClrExternal'))
 BEGIN
-	PRINT '+Creating schema [ClrUnsafe]';
-	EXEC ('CREATE SCHEMA [ClrUnsafe] AUTHORIZATION [dbo]');
+	PRINT '+Creating schema [ClrExternal]';
+	EXEC ('CREATE SCHEMA [ClrExternal] AUTHORIZATION [dbo]');
 END
 GO
 
-IF (OBJECT_ID('[ClrUnsafe].[usp_ExportBinaryData]') IS NOT NULL)
+IF (OBJECT_ID('[ClrExternal].[usp_ExportBinaryData]') IS NOT NULL)
 BEGIN
-	RAISERROR(N'-Dropping [ClrUnsafe].[usp_ExportBinaryData]', 0, 0) WITH NOWAIT;
-	DROP PROCEDURE [ClrUnsafe].[usp_ExportBinaryData]
+	RAISERROR(N'-Dropping [ClrExternal].[usp_ExportBinaryData]', 0, 0) WITH NOWAIT;
+	DROP PROCEDURE [ClrExternal].[usp_ExportBinaryData]
 END
 
-PRINT '+Creating [ClrUnsafe].[usp_ExportProjectClr]'
+PRINT '+Creating [ClrExternal].[usp_ExportProjectClr]'
 GO
 /* ==========================================================================
    Author:		Pavel Pawlowski
@@ -24,7 +24,7 @@ GO
 	,@binaryDataFieldName	nvarchar(128)		-- Name of the field containing binary data to be exported
 	,@createPath			bit					-- Specifies whether directories in path of target filename should be automatically created if not exists
 ========================================================================== */
-CREATE PROCEDURE [ClrUnsafe].[usp_ExportBinaryData]
+CREATE PROCEDURE [ClrExternal].[usp_ExportBinaryData]
     @sourceQuery			nvarchar(max)		-- Source query providing binary data and corresponding files for data export
 	,@filePathFieldName		nvarchar(128)		-- Name of the field providing full path to export file
 	,@binaryDataFieldName	nvarchar(128)		-- Name of the field containing binary data to be exported
@@ -32,13 +32,13 @@ CREATE PROCEDURE [ClrUnsafe].[usp_ExportBinaryData]
 	,@reportProgress		bit				= 1 -- Specifies whether progress should be reported.
 WITH EXECUTE AS CALLER
 AS
-EXTERNAL NAME [PPSqlClrUnsafe].[BinaryDataExporter].[ExportBinaryData]
+EXTERNAL NAME [PPSqlClrExternal].[BinaryDataExporter].[ExportBinaryData]
 GO
 
-IF (OBJECT_ID('[ClrUnsafe].[fn_ExportBinaryColumn]') IS NOT NULL)
+IF (OBJECT_ID('[ClrExternal].[fn_ExportBinaryColumn]') IS NOT NULL)
 BEGIN
-	PRINT '-Dropping [ClrUnsafe].[fn_ExportBinaryColumn]'
-	DROP FUNCTION [ClrUnsafe].[fn_ExportBinaryColumn]
+	PRINT '-Dropping [ClrExternal].[fn_ExportBinaryColumn]'
+	DROP FUNCTION [ClrExternal].[fn_ExportBinaryColumn]
 END
 
 PRINT '+Creating [ClrUnsafe].[fn_ExportBinaryColumn]'
@@ -53,7 +53,7 @@ GO
 	,@targetFile nvarchar(1024)		--Full Path to target file
 	,@createPath bit			= 1	--Specifies whether directories in path of target filename should be automatically created if not exists
    ============================================= */
-CREATE FUNCTION [ClrUnsafe].[fn_ExportBinaryColumn](
+CREATE FUNCTION [ClrExternal].[fn_ExportBinaryColumn](
 	@binaryData varbinary(max)		--Binary data to be exported
 	,@targetFile nvarchar(1024)		--Full Path to target file
 	,@createPath bit			= 1	--Specifies whether directories in path of target filename should be automatically created if not exists
@@ -61,5 +61,5 @@ CREATE FUNCTION [ClrUnsafe].[fn_ExportBinaryColumn](
 RETURNS [int]
 WITH EXECUTE AS CALLER
 AS 
-EXTERNAL NAME [PPSqlClrUnsafe].[BinaryDataExporter].[ExportBinaryColumn]
+EXTERNAL NAME [PPSqlClrExternal].[BinaryDataExporter].[ExportBinaryColumn]
 GO
