@@ -72,17 +72,6 @@ BEGIN
 	CLOSE tc;
 	DEALLOCATE tc;
 
-	--DECLARE @dbName nvarchar(128) = DB_NAME();
-	IF NOT EXISTS(SELECT is_trustworthy_on FROM sys.databases WHERE is_trustworthy_on = 1 AND name = DB_NAME())
-	BEGIN
-		PRINT N'+Setting database ' + QUOTENAME(DB_NAME()) + N' TRUSTWORTHY ON';
-		SET @sql = N'ALTER DATABASE ' + QUOTENAME(DB_NAME()) + N' SET TRUSTWORTHY ON WITH ROLLBACK IMMEDIATE;'
-
-		IF(@sql IS NOT NULL)
-			EXEC (@sql)
-	END
-
-
 	--Drop Assembly
 	IF (EXISTS(SELECT 1 FROM sys.assemblies WHERE name = 'PPSqlClrExternal'))
 	BEGIN
@@ -116,6 +105,6 @@ BEGIN
 	CREATE ASSEMBLY [PPSqlClrExternal]
 	AUTHORIZATION [dbo]
 	FROM 'C:\SQLCLR\PP.SqlClr.External.dll'
-	WITH PERMISSION_SET = UNSAFE
+	WITH PERMISSION_SET = EXTERNAL_ACCESS
 END
 GO
