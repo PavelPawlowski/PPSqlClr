@@ -5,6 +5,7 @@
 
 trigger:
 - master
+    
 
 pool:
   vmImage: 'windows-latest'
@@ -28,7 +29,7 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
-  displayName: 'PP.SqlClr.DirectoryServices binaries'
+  displayName: 'Copy PP.SqlClr.DirectoryServices binaries'
   inputs:
     SourceFolder: 'PP.SqlClr.DirectoryServices\bin\$(BuildConfiguration)'
     Contents: '*.dll'
@@ -36,9 +37,61 @@ steps:
     CleanTargetFolder: true
 
 - task: CopyFiles@2
+  displayName: 'Copy PP.SqlClr.DirectoryServicesAccounts binaries'
   inputs:
-    Contents: |
-      **\bin\$(BuildConfiguration)\**
-      **/*.sql
+    SourceFolder: 'PP.SqlClr.DirectoryServicesAccounts\bin\$(BuildConfiguration)'
+    Contents: '*.dll'
+    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.DirectoryServicesAccounts'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy PP.SqlClr.External binaries'
+  inputs:
+    SourceFolder: 'PP.SqlClr.External\bin\$(BuildConfiguration)'
+    Contents: '*.dll'
+    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.External'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy PP.SqlClr.Safe binaries'
+  inputs:
+    SourceFolder: 'PP.SqlClr.Safe\bin\$(BuildConfiguration)'
+    Contents: '*.dll'
+    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.Safe'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy PP.SqlClr.SharePoint binaries'
+  inputs:
+    SourceFolder: 'PP.SqlClr.SharePoint\bin\$(BuildConfiguration)'
+    Contents: '*.dll'
+    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.SharePoint'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy PP.SqlClr.Types binaries'
+  inputs:
+    SourceFolder: 'PP.SqlClr.Types\bin\$(BuildConfiguration)'
+    Contents: '*.dll'
+    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.Types'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy PP.SqlClr.Unsafe binaries'
+  inputs:
+    SourceFolder: 'PP.SqlClr.Unsafe\bin\$(BuildConfiguration)'
+    Contents: '*.dll'
+    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.Unsafe'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy SQL Scripts'
+  inputs:
+    Contents: '**/*.sql'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'PPSqlClr'
+    publishLocation: 'Container'
