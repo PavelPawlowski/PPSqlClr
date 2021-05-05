@@ -8,6 +8,8 @@ name: 'SqlClr_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)'
 trigger:
 - master
     
+workspace:
+  clean: all
 
 pool:
   vmImage: 'windows-latest'
