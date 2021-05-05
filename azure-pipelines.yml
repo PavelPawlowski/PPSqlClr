@@ -29,7 +29,9 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    Contents: '**/*.sql'
+    Contents: |
+      **\bin\$(BuildConfiguration)\**
+      **/*.sql
     TargetFolder: '$(build.artifactstagingdirectory)'
     CleanTargetFolder: true
 
