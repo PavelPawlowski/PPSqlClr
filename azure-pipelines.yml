@@ -3,6 +3,8 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
+name: 'SqlClr_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)'
+
 trigger:
 - master
     
@@ -16,11 +18,11 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@1
+#- task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+#- task: NuGetCommand@2
+#  inputs:
+#    restoreSolution: '$(solution)'
 
 - task: VSBuild@1
   inputs:
@@ -29,66 +31,26 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
-  displayName: 'Copy PP.SqlClr.DirectoryServices binaries'
+  displayName: 'Copy Binaries'
   inputs:
-    SourceFolder: 'PP.SqlClr.DirectoryServices\bin\$(BuildConfiguration)'
-    Contents: '*.dll'
-    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.DirectoryServices'
+    Contents: '**\bin\$(BuildConfiguration)\*.dll'
+    TargetFolder: '$(Build.BinariesDirectory)'
     CleanTargetFolder: true
-
-- task: CopyFiles@2
-  displayName: 'Copy PP.SqlClr.DirectoryServicesAccounts binaries'
-  inputs:
-    SourceFolder: 'PP.SqlClr.DirectoryServicesAccounts\bin\$(BuildConfiguration)'
-    Contents: '*.dll'
-    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.DirectoryServicesAccounts'
-    CleanTargetFolder: true
-
-- task: CopyFiles@2
-  displayName: 'Copy PP.SqlClr.External binaries'
-  inputs:
-    SourceFolder: 'PP.SqlClr.External\bin\$(BuildConfiguration)'
-    Contents: '*.dll'
-    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.External'
-    CleanTargetFolder: true
-
-- task: CopyFiles@2
-  displayName: 'Copy PP.SqlClr.Safe binaries'
-  inputs:
-    SourceFolder: 'PP.SqlClr.Safe\bin\$(BuildConfiguration)'
-    Contents: '*.dll'
-    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.Safe'
-    CleanTargetFolder: true
-
-- task: CopyFiles@2
-  displayName: 'Copy PP.SqlClr.SharePoint binaries'
-  inputs:
-    SourceFolder: 'PP.SqlClr.SharePoint\bin\$(BuildConfiguration)'
-    Contents: '*.dll'
-    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.SharePoint'
-    CleanTargetFolder: true
-
-- task: CopyFiles@2
-  displayName: 'Copy PP.SqlClr.Types binaries'
-  inputs:
-    SourceFolder: 'PP.SqlClr.Types\bin\$(BuildConfiguration)'
-    Contents: '*.dll'
-    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.Types'
-    CleanTargetFolder: true
-
-- task: CopyFiles@2
-  displayName: 'Copy PP.SqlClr.Unsafe binaries'
-  inputs:
-    SourceFolder: 'PP.SqlClr.Unsafe\bin\$(BuildConfiguration)'
-    Contents: '*.dll'
-    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.Unsafe'
-    CleanTargetFolder: true
+    flattenFolders: true
 
 - task: CopyFiles@2
   displayName: 'Copy SQL Scripts'
   inputs:
     Contents: '**/*.sql'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    TargetFolder: '$(Build.BinariesDirectory)'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'
+    replaceExistingArchive: true
 
 - task: PublishBuildArtifacts@1
   inputs:
