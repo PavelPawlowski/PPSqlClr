@@ -28,10 +28,17 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
+  displayName: 'PP.SqlClr.DirectoryServices binaries'
+  inputs:
+    SourceFolder: 'PP.SqlClr.DirectoryServices\bin\$(BuildConfiguration)'
+    Contents: '*.dll'
+    TargetFolder: '$(build.artifactstagingdirectory)\PP.SqlClr.DirectoryServices'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
   inputs:
     Contents: |
       **\bin\$(BuildConfiguration)\**
       **/*.sql
     TargetFolder: '$(build.artifactstagingdirectory)'
-    CleanTargetFolder: true
 
